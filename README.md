@@ -1,5 +1,5 @@
 # pulpit-to-the-small-group
-A small project aimed at using Gemma to transcribe sermons, thereby facilitating preparation for small-group leaders.
+A small project that uses Whisper to transcribe sermons and Gemma to summarize them, making preparation easier for small-group leaders.
 
 ## Third-party models
 
