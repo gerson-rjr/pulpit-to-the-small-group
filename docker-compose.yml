@@ -1,3 +1,46 @@
 name: transcribe-sermons
-services: 
-  
+
+services:
+  # LLM que organiza e resume as transcrições (API: http://localhost:11434)
+  gemma:
+    image: ollama/ollama:0.35.1
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # Baixa o modelo do Gemma uma vez e encerra (o pull é ignorado se o modelo já existe)
+  gemma-pull:
+    image: ollama/ollama:0.35.1
+    environment:
+      - OLLAMA_HOST=gemma:11434
+    entrypoint: ["ollama", "pull", "gemma3:4b"]
+    depends_on:
+      gemma:
+        condition: service_healthy
+    restart: "no"
+
+  # Transcrição de áudio (API e Swagger: http://localhost:9000/docs)
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:v1.10.0
+    ports:
+      - "127.0.0.1:9000:9000"
+    environment:
+      - ASR_ENGINE=faster_whisper
+      - ASR_MODEL=large-v3-turbo
+      - ASR_DEVICE=cpu
+      - ASR_QUANTIZATION=int8
+      - ASR_MODEL_PATH=/data/whisper
+    volumes:
+      - whisper-models:/data/whisper
+    restart: unless-stopped
+
+volumes:
+  ollama-models:
+  whisper-models:
