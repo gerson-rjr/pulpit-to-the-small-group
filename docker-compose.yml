@@ -6,13 +6,19 @@ services:
     image: ollama/ollama:0.35.1
     ports:
       - "127.0.0.1:11434:11434"
+    environment:
+      # Pregações de 60 min geram ~12-15k tokens; o excesso seria descartado em silêncio
+      - OLLAMA_CONTEXT_LENGTH=16384
     volumes:
       - ollama-models:/root/.ollama
     healthcheck:
       test: ["CMD", "ollama", "list"]
-      interval: 10s
+      # Checa a cada 2s na subida e depois só a cada 60s, para não poluir os logs
+      start_period: 60s
+      start_interval: 2s
+      interval: 60s
       timeout: 5s
-      retries: 10
+      retries: 3
     restart: unless-stopped
 
   # Baixa o modelo do Gemma uma vez e encerra (o pull é ignorado se o modelo já existe)

@@ -17,7 +17,7 @@ Everything runs locally with Docker Compose (`docker-compose.yml`, project name 
 
 | Service | Image | Role | Endpoint |
 |---|---|---|---|
-| `gemma` | `ollama/ollama:0.35.1` | Serves `gemma3:4b` via Ollama | `http://127.0.0.1:11434` |
+| `gemma` | `ollama/ollama:0.35.1` | Serves `gemma3:4b` via Ollama (context 16384 tokens) | `http://127.0.0.1:11434` |
 | `gemma-pull` | `ollama/ollama:0.35.1` | One-shot job: pulls `gemma3:4b` once `gemma` is healthy, then exits | — |
 | `whisper` | `onerahmet/openai-whisper-asr-webservice:v1.10.0` | faster-whisper, `large-v3-turbo`, int8 on CPU | `http://127.0.0.1:9000` (Swagger at `/docs`) |
 
