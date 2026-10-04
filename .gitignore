@@ -1,0 +1,17 @@
+# Sermon audio and transcriptions (may contain private church content)
+*.mp3
+*.m4a
+*.wav
+*.ogg
+*.opus
+*.flac
+*.aac
+*.mp4
+*.webm
+transcricao*.txt
+resumo*.md
+audios/
+transcricoes/
+
+# Local environment
+.env
